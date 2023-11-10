@@ -7,6 +7,7 @@ from abc import abstractmethod
 
 from .bert_tokenization import FullTokenizer as FullBertTokenizer
 from .gpt2_tokenization import GPT2Tokenizer
+import sentencepiece as spm
 
 
 def build_tokenizer(args):
@@ -39,6 +40,9 @@ def build_tokenizer(args):
     elif args.tokenizer_type == 'NullTokenizer':
         assert args.vocab_size is not None
         tokenizer = _NullTokenizer(args.vocab_size)
+    elif args.tokenizer_type == "LightyearTokenizer":
+        assert args.vocab_file is not None
+        tokenizer = LightyearTokenizer(args.vocab_file)
     else:
         raise NotImplementedError('{} tokenizer is not '
                                   'implemented.'.format(args.tokenizer_type))
@@ -534,3 +538,45 @@ class _NullTokenizer:
     @property
     def additional_special_tokens_ids(self):
         return None
+
+
+class LightyearTokenizer(AbstractTokenizer):
+    def __init__(self, vocab_file):
+        name = "Lightyear"
+        super().__init__(name)
+
+        self.tokenizer = spm.SentencePieceProcessor(model_file=vocab_file)
+        self.special_tokens = {'eos_token': '</s>', 'unk_token': '<unk>', 'pad_token': '<pad>'}
+        self.eod_id = self.tokenizer.piece_to_id(self.special_tokens['eos_token'])
+
+        self.encoder = self.vocab
+        self.decoder = self.inv_vocab
+
+
+    @property
+    def vocab_size(self):
+        return self.tokenizer.get_piece_size()
+
+    @property
+    def vocab(self):
+        return {
+            self.tokenizer.id_to_piece(idx): idx
+            for idx in range(self.tokenizer.get_piece_size())
+        }
+
+    @property
+    def inv_vocab(self):
+        return {
+            idx: self.tokenizer.id_to_piece(idx)
+            for idx in range(self.tokenizer.get_piece_size())
+        }
+
+    def tokenize(self, text):
+        return self.tokenizer.encode(text)
+
+    def detokenize(self, token_ids):
+        return self.tokenizer.decode(token_ids)
+
+    @property
+    def eod(self):
+        return self.eod_id

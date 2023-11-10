@@ -44,6 +44,7 @@ def initialize_megatron(extra_args_provider=None, args_defaults={},
 
     # Parse arguments
     args = parse_args(extra_args_provider, ignore_unknown_args)
+
     # Set input args.
     for key in args_defaults:
         # The args_defaults is for those who want to set default value or pass parameters when
@@ -54,7 +55,6 @@ def initialize_megatron(extra_args_provider=None, args_defaults={},
                                            v2=args_defaults[key]),
                                            flush=True)
         setattr(args, key, args_defaults[key])
-
 
     if args.use_checkpoint_args or args_defaults.get('use_checkpoint_args', False):
         assert args.load is not None, '--use-checkpoints-args requires --load argument'
