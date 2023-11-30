@@ -1,0 +1,56 @@
+# 表示作业的基本信息，自动填充，请勿修改
+[base]
+type = ml-easy-job
+
+[resource]
+usergroup = hadoop-aipnlp-cloud
+queue =root.tx_training_cluster.hadoop-llmcloud.job
+
+
+[roles]
+workers = 64
+worker.memory = 943200
+worker.vcore = 64
+worker.gcores80g = 8
+worker.ports = 1
+# worker启动后执行的脚本，一般为训练作业的执行命令
+worker.script = bash moe_13b_16e_top2_launcher.sh
+
+[am]
+afo.app.am.resource.mb = 4096
+
+[tensorboard]
+with.tensor.board = true
+board.vcore = 64
+board.memory = 40960
+board.log_dir = /cfs/hadoop-mlp-ckpt/gnmodel/moe_13b_16e_top2_20201130/tensorboard
+
+# 是否使用预拉取
+[data]
+afo.data.prefetch=false
+
+# 是否支持容错
+[failover]
+afo.app.support.engine.failover=true
+afo.role.worker.task.attempt.max.retry=8
+afo.app.check_pod_healthy=true
+
+afo.afo-base.image.version=gpt_st
+afo.docker.image.name=registryonline-hulk.sankuai.com/custom_prod/com.sankuai.data.hadoop.gpu/data-hadoop-aipnlp-cloud_deepspeed_moe:0.0.1-d55a0fce
+
+[others]
+# pytorch dataloader可能会用到共享内存，配置需要的共享内存（单位为B）
+afo.app.env.YARN_CONTAINER_RUNTIME_DOCKER_SHM_SIZE_BYTES=343597383680
+afo.app.env.YARN_CONTAINER_RUNTIME_DOCKER_ULIMITS=memlock=-1
+afo.network.mode=TCP
+
+# 提交作业时打包上传文件
+afo.use.acceleration.submission=true
+
+afo.support.dolphinfs.annotation=false
+afo.use.host_network=true
+afo.job.in_one_net_pod=true
+afo.docker.rw.volume.paths=/cfs/hadoop-mlp-ckpt:/cfs/hadoop-mlp-ckpt,/mnt/beegfs-training3/ssd_pool/docker/user/hadoop-mlp-ckpt:/mnt/dolphinfs/ssd_pool/docker/user/hadoop-mlp-ckpt,/mnt/beegfs/hdd_pool/docker/user/hadoop-aipnlp:/mnt/dolphinfs/hdd_pool/docker/user/hadoop-aipnlp,/mnt/beegfs/ssd_pool/docker/user/hadoop-aipnlp:/mnt/dolphinfs/ssd_pool/docker/user/hadoop-aipnlp,/mnt/beegfs/ssd_pool/docker/user/hadoop-hdp:/mnt/dolphinfs/ssd_pool/docker/user/hadoop-hdp,/mnt/beegfs/hdd_pool/docker/user/hadoop-hdp:/mnt/dolphinfs/hdd_pool/docker/user/hadoop-hdp
+
+# hostfile 文件
+afo.role.worker.nopassword=true
