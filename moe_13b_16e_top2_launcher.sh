@@ -17,63 +17,72 @@ export MLP_MPI_HOSTFILE="${WORKDIR}/hostfile.txt"
 python3 hope_gen_hostfile.py --target_path $MLP_MPI_HOSTFILE
 
 DATA_DIR="/cfs/hadoop-mlp-ckpt/gndata"
+DATA_PATH="$DATA_DIR/en/redpajama/v1/arxiv/tokenized_text_document"
 
-DATA_PATH="
-  0.024491595300879247 $DATA_DIR/en/redpajama/v1/arxiv/tokenized_text_document \
-  0.03918655248140679 $DATA_DIR/en/redpajama/v1/book/tokenized_text_document \
-  0.08278159211697185 $DATA_DIR/en/redpajama/v1/c4/tokenized_text_document \
-  0.0685764668424618 $DATA_DIR/en/redpajama/v1/common_craw_merge/2019-30-part/tokenized_text_document \
-  0.0685764668424618 $DATA_DIR/en/redpajama/v1/common_craw_merge/2020-05-part/tokenized_text_document \
-  0.0685764668424618 $DATA_DIR/en/redpajama/v1/common_craw_merge/2022-05-part/tokenized_text_document \
-  0.0685764668424618 $DATA_DIR/en/redpajama/v1/common_craw_merge/2023-06-part-v2/tokenized_text_document \
-  0.0007200529018458498 $DATA_DIR/en/redpajama/v1/stackexchange/tokenized_text_document \
-  0.00783731049628136 $DATA_DIR/en/wiki/tokenized_text_document \
-  0.006073915634618053 $DATA_DIR/en/pile/Wikipedia/tokenized_text_document \
-  0.0041145880105477135 $DATA_DIR/en/pile/DMMathematics/tokenized_text_document \
-  0.00023511931488844076 $DATA_DIR/en/pile/EnronEmails/tokenized_text_document \
-  0.0013225461462474796 $DATA_DIR/en/pile/EuroParl/tokenized_text_document \
-  0.009306806214334114 $DATA_DIR/en/pile/FreeLaw/tokenized_text_document \
-  0.005877982872211019 $DATA_DIR/en/pile/Gutenberg/tokenized_text_document \
-  0.0009649688548546423 $DATA_DIR/en/pile/HackerNews/tokenized_text_document \
-  0.0003379840151521336 $DATA_DIR/en/pile/NIHExPorter/tokenized_text_document \
-  0.0025961091018932 $DATA_DIR/en/pile/OpenSubtitles/tokenized_text_document \
-  0.044084871541582644 $DATA_DIR/en/pile/OpenWebText2/tokenized_text_document \
-  0.000587798287221102 $DATA_DIR/en/pile/PhilPapers/tokenized_text_document \
-  0.0038696720575389213 $DATA_DIR/en/pile/PubMedAbstracts/tokenized_text_document \
-  0.021062771958756152 $DATA_DIR/en/pile/PubMedCentral/tokenized_text_document \
-  0.000489831906017585 $DATA_DIR/en/pile/UbuntuIRC/tokenized_text_document \
-  0.001175596574442204 $DATA_DIR/en/pile/YoutubeSubtitles/tokenized_text_document \
-  0.0157331655129012 $DATA_DIR/zh/wudao/v3_tokenized/tokenized_text_document \
-  0.13373190685966022 $DATA_DIR/zh/cc/v2_exact_dedup_merged/tokenized \
-  0.003697293895531782 $DATA_DIR/zh/zhihu_v2/zhihu_qa_without_url/tokenized_text_document \
-  0.005624606670862179 $DATA_DIR/zh/zhihu_v2/zhihu_article_without_url/tokenized_text_document \
-  0.0235997482693518 $DATA_DIR/zh/gzh_merged/tokenized_text_document \
-  0.0471994965387036 $DATA_DIR/zh/rubish/tokenized/_text_document \
-  0.0235997482693518 $DATA_DIR/zh2/fudan_book/v1/cbooks_epub_mobi_merge/tokenized_text_document \
-  0.0078665827564506 $DATA_DIR/en/bk/baike_clean_v2/tokenized_text_document \
-  0.002910635619886722 $DATA_DIR/en/bk/baike_in_zhidao_clean_v2/tokenized_text_document \
-  0.0009203901825047201 $DATA_DIR/zh_en_translation/tokenized_text_document \
-  0.0008967904342353684 $DATA_DIR/reverse_zh_en_translation/tokenized_text_document \
-  0.00039332913782253 $DATA_DIR/zh2/shiti/output/20230722/tokenized_text_document \
-  0.03382630585273758 $DATA_DIR/zh/zhidao/stage2_tokenized/tokenized_text_document \
-  0.09957834793297136 $DATA_DIR/code/starcoderdata/tokenized_text_document \
-  1.5559116864526773e-06 $DATA_DIR/en/math1/tokenized_text_document \
-  0.00042009615534222293 $DATA_DIR/en/math2/tokenized_text_document \
-"
+
+#DATA_PATH="
+#  0.024491595300879247 $DATA_DIR/en/redpajama/v1/arxiv/tokenized_text_document \
+#  0.03918655248140679 $DATA_DIR/en/redpajama/v1/book/tokenized_text_document \
+#  0.08278159211697185 $DATA_DIR/en/redpajama/v1/c4/tokenized_text_document \
+#  0.0685764668424618 $DATA_DIR/en/redpajama/v1/common_craw_merge/2019-30-part/tokenized_text_document \
+#  0.0685764668424618 $DATA_DIR/en/redpajama/v1/common_craw_merge/2020-05-part/tokenized_text_document \
+#  0.0685764668424618 $DATA_DIR/en/redpajama/v1/common_craw_merge/2022-05-part/tokenized_text_document \
+#  0.0685764668424618 $DATA_DIR/en/redpajama/v1/common_craw_merge/2023-06-part-v2/tokenized_text_document \
+#  0.0007200529018458498 $DATA_DIR/en/redpajama/v1/stackexchange/tokenized_text_document \
+#  0.00783731049628136 $DATA_DIR/en/wiki/tokenized_text_document \
+#  0.006073915634618053 $DATA_DIR/en/pile/Wikipedia/tokenized_text_document \
+#  0.0041145880105477135 $DATA_DIR/en/pile/DMMathematics/tokenized_text_document \
+#  0.00023511931488844076 $DATA_DIR/en/pile/EnronEmails/tokenized_text_document \
+#  0.0013225461462474796 $DATA_DIR/en/pile/EuroParl/tokenized_text_document \
+#  0.009306806214334114 $DATA_DIR/en/pile/FreeLaw/tokenized_text_document \
+#  0.005877982872211019 $DATA_DIR/en/pile/Gutenberg/tokenized_text_document \
+#  0.0009649688548546423 $DATA_DIR/en/pile/HackerNews/tokenized_text_document \
+#  0.0003379840151521336 $DATA_DIR/en/pile/NIHExPorter/tokenized_text_document \
+#  0.0025961091018932 $DATA_DIR/en/pile/OpenSubtitles/tokenized_text_document \
+#  0.044084871541582644 $DATA_DIR/en/pile/OpenWebText2/tokenized_text_document \
+#  0.000587798287221102 $DATA_DIR/en/pile/PhilPapers/tokenized_text_document \
+#  0.0038696720575389213 $DATA_DIR/en/pile/PubMedAbstracts/tokenized_text_document \
+#  0.021062771958756152 $DATA_DIR/en/pile/PubMedCentral/tokenized_text_document \
+#  0.000489831906017585 $DATA_DIR/en/pile/UbuntuIRC/tokenized_text_document \
+#  0.001175596574442204 $DATA_DIR/en/pile/YoutubeSubtitles/tokenized_text_document \
+#  0.0157331655129012 $DATA_DIR/zh/wudao/v3_tokenized/tokenized_text_document \
+#  0.13373190685966022 $DATA_DIR/zh/cc/v2_exact_dedup_merged/tokenized \
+#  0.003697293895531782 $DATA_DIR/zh/zhihu_v2/zhihu_qa_without_url/tokenized_text_document \
+#  0.005624606670862179 $DATA_DIR/zh/zhihu_v2/zhihu_article_without_url/tokenized_text_document \
+#  0.0235997482693518 $DATA_DIR/zh/gzh_merged/tokenized_text_document \
+#  0.0471994965387036 $DATA_DIR/zh/rubish/tokenized/_text_document \
+#  0.0235997482693518 $DATA_DIR/zh2/fudan_book/v1/cbooks_epub_mobi_merge/tokenized_text_document \
+#  0.0078665827564506 $DATA_DIR/en/bk/baike_clean_v2/tokenized_text_document \
+#  0.002910635619886722 $DATA_DIR/en/bk/baike_in_zhidao_clean_v2/tokenized_text_document \
+#  0.0009203901825047201 $DATA_DIR/zh_en_translation/tokenized_text_document \
+#  0.0008967904342353684 $DATA_DIR/reverse_zh_en_translation/tokenized_text_document \
+#  0.00039332913782253 $DATA_DIR/zh2/shiti/output/20230722/tokenized_text_document \
+#  0.03382630585273758 $DATA_DIR/zh/zhidao/stage2_tokenized/tokenized_text_document \
+#  0.09957834793297136 $DATA_DIR/code/starcoderdata/tokenized_text_document \
+#  1.5559116864526773e-06 $DATA_DIR/en/math1/tokenized_text_document \
+#  0.00042009615534222293 $DATA_DIR/en/math2/tokenized_text_document \
+#"
 
 SEQ_LEN=4096
 
-MODEL_SIZE=33
-NUM_LAYERS=40
-HIDDEN_SIZE=6656
-NUM_ATTN_HEADS=52
+#MODEL_SIZE=33
+#NUM_LAYERS=40
+#HIDDEN_SIZE=6656
+#NUM_ATTN_HEADS=52
+#GLOBAL_BATCH_SIZE=2048
+
+MODEL_SIZE=1
+NUM_LAYERS=22
+HIDDEN_SIZE=2048
+NUM_ATTN_HEADS=16
 GLOBAL_BATCH_SIZE=2048
 
 ###############################################################################
 ### Training duration configs
 ## The main termination condition, original GPT-3 paper trains for 300B tokens
 ## For MoE model, we found sometimes training a bit more to 330B tokens helps
-TRAIN_TOKENS=3200000000000
+#TRAIN_TOKENS=3200000000000
+TRAIN_TOKENS=32000000
 
 ## TRAIN_ITERS is another termination condition and also affect the number of
 ## data samples to be indexed. Since we want to reach the TRAIN_TOKENS
@@ -109,8 +118,8 @@ TP_SIZE=2
 PP_SIZE=1
 
 NUM_GPUS_PERNODE=8
-NUM_NODE=64
-NUM_GPUS=512
+NUM_NODE=1
+NUM_GPUS=8
 ###############################################################################
 ### MoE configs
 ## Number of experts. EP_SIZE 1 means dense model without MoE
@@ -309,7 +318,8 @@ if [[ $ITERATION -gt 0 ]]; then
     ds_ssh "echo $ITERATION_2 > $ITERATION_FILE_2"
 fi
 
-run_cmd="deepspeed --hostfile=$MLP_MPI_HOSTFILE $WORKDIR/pretrain_gpt.py ${megatron_options} ${data_options} ${deepspeed_options}"
+#run_cmd="deepspeed --hostfile=$MLP_MPI_HOSTFILE $WORKDIR/pretrain_gpt.py ${megatron_options} ${data_options} ${deepspeed_options}"
+run_cmd="deepspeed  $WORKDIR/pretrain_gpt.py ${megatron_options} ${data_options} ${deepspeed_options}"
 echo ${run_cmd}
 eval ${run_cmd}
 set +x

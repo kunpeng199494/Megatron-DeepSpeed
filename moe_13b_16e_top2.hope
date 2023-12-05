@@ -8,7 +8,7 @@ queue =root.tx_training_cluster.hadoop-llmcloud.job
 
 
 [roles]
-workers = 64
+workers = 1
 worker.memory = 943200
 worker.vcore = 64
 worker.gcores80g = 8
