@@ -123,8 +123,8 @@ NUM_GPUS=8
 ###############################################################################
 ### MoE configs
 ## Number of experts. EP_SIZE 1 means dense model without MoE
-# EP_SIZE=1
-EP_SIZE=16
+EP_SIZE=1
+#EP_SIZE=16
 
 if [[ $EP_SIZE -gt $NUM_GPUS ]]; then
     EP_PARALLEL_SIZE=$NUM_GPUS

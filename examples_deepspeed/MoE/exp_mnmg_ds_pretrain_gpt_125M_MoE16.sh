@@ -1,13 +1,13 @@
 #!/bin/bash
 
 DIR=`pwd`
-SEQ_LEN=2048
+SEQ_LEN=4096
 
 MODEL_SIZE=13
-NUM_LAYERS=32
-HIDDEN_SIZE=5120
-NUM_ATTN_HEADS=40
-GLOBAL_BATCH_SIZE=1024
+NUM_LAYERS=40
+HIDDEN_SIZE=6656
+NUM_ATTN_HEADS=52
+GLOBAL_BATCH_SIZE=768
 
 ###############################################################################
 ### Training duration configs
@@ -38,7 +38,7 @@ LR_DECAY_TOKENS=3000000
 ### Parallelism configs
 ## Micro batch size per GPU
 ## Make sure that BATCH_SIZE <= GLOBAL_BATCH_SIZE*PP_SIZE*TP_SIZE/NUM_GPUS
-BATCH_SIZE=8
+BATCH_SIZE=1
 
 ## Model parallelism, 1 is no MP
 TP_SIZE=2
@@ -266,11 +266,7 @@ if [[ $ITERATION -gt 0 ]]; then
     ds_ssh "echo $ITERATION_2 > $ITERATION_FILE_2"
 fi
 
-echo $MLP_MPI_HOSTFILE
-
-python3 /share_nfs/duanqiyuan/code/Megatron-DeepSpeed//examples_deepspeed/MoE/read_host_file.py --source_path $MLP_MPI_HOSTFILE
-
-#run_cmd="deepspeed --hostfile=$MLP_MPI_HOSTFILE /share_nfs/duanqiyuan/code/Megatron-DeepSpeed/pretrain_gpt.py ${megatron_options} ${data_options} ${deepspeed_options}"
-#echo ${run_cmd}
-#eval ${run_cmd}
-#set +x
+run_cmd="deepspeed --hostfile=$MLP_MPI_HOSTFILE /share_nfs/duanqiyuan/code/Megatron-DeepSpeed/pretrain_gpt.py ${megatron_options} ${data_options} ${deepspeed_options}"
+echo ${run_cmd}
+eval ${run_cmd}
+set +x
